@@ -59,9 +59,10 @@ private:
   // typical behaviour methods
   void cycleThroughPhases();
 
-  // TODO: FP.4b : create a private member of type MessageQueue for messages of type TrafficLightPhase
+  // NOTE: FP.4b : create a private member of type MessageQueue for messages of type TrafficLightPhase
   // and use it within the infinite loop to push each new TrafficLightPhase into it by calling
   // send in conjunction with move semantics.
+  MessageQueue<TrafficLightPhase> _phasesQueue;
 
   std::condition_variable _condition;
   std::mutex _mutex;
