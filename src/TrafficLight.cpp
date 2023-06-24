@@ -1,7 +1,5 @@
 #include "TrafficLight.h"
 #include "TrafficObject.h"
-#include <iostream>
-#include <random>
 
 // clang-format off
 
@@ -32,10 +30,6 @@ TrafficLight::TrafficLight()
   _currentPhase = TrafficLightPhase::red;
 }
 
-void TrafficLight::cycleThroughPhases()
-{
-  _currentPhase = _currentPhase == TrafficLightPhase::red ? TrafficLightPhase::green : TrafficLightPhase::red;
-}
 
 /* 
 void TrafficLight::waitForGreen()
@@ -54,14 +48,43 @@ void TrafficLight::simulate()
 {
     // TODO: FP.2b : Finally, the private method „cycleThroughPhases“ should be started in a thread when the public method „simulate“ is called. To do this, use the thread queue in the base class. 
 }
+*/
 
 // virtual function which is executed in a thread
 void TrafficLight::cycleThroughPhases()
 {
-    // TODO: FP.2a : Implement the function with an infinite loop that measures the time between two loop cycles 
+    // NOTE: FP.2a : Implement the function with an infinite loop that measures the time between two loop cycles 
     // and toggles the current phase of the traffic light between red and green and sends an update method 
     // to the message queue using move semantics. The cycle duration should be a random value between 4 and 6 seconds. 
     // Also, the while-loop should use std::this_thread::sleep_for to wait 1ms between two cycles. 
-}
 
-*/
+  // Set random generator
+  std::random_device seed;
+  auto gen = std::mt19937{seed()};
+  auto dist = std::uniform_int_distribution<std::int32_t>{4000, 6000};
+
+  bool new_cycle = true;
+  int random_time;
+  std::chrono::time_point<std::chrono::steady_clock> start;
+
+  while (true) {
+
+    if (new_cycle) {
+      new_cycle = false;
+      random_time = dist(gen);
+      start = std::chrono::steady_clock::now();
+    }
+
+    auto elapsed_time =
+        std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start);
+
+    if (elapsed_time.count() > random_time) {
+      _currentPhase = _currentPhase == TrafficLightPhase::red ? TrafficLightPhase::green : TrafficLightPhase::red;
+      new_cycle = true;
+
+      // FIX: Add a MessageQueue send !
+    }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+  }
+}

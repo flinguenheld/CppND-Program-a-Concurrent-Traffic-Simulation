@@ -2,9 +2,13 @@
 #define TRAFFICLIGHT_H
 
 #include "TrafficObject.h"
+#include <chrono>
 #include <condition_variable>
 #include <deque>
+#include <iostream>
 #include <mutex>
+#include <random>
+#include <thread>
 
 // forward declarations to avoid include cycle
 class Vehicle;
