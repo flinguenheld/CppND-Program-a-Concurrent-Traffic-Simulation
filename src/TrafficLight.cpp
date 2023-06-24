@@ -7,15 +7,20 @@
 
 /* Implementation of class "MessageQueue" */
 
-/* 
 template <typename T>
-T MessageQueue<T>::receive()
+T MessageQueue<T>::Receive()
 {
-    // TODO: FP.5a : The method receive should use std::unique_lock<std::mutex> and _condition.wait() 
+    // NOTE: FP.5a : The method receive should use std::unique_lock<std::mutex> and _condition.wait() 
     // to wait for and receive new messages and pull them from the queue using move semantics. 
     // The received object should then be returned by the receive function. 
+
+  std::unique_lock<std::mutex> ul(_mutex);
+  _condition.wait(ul, [this]{return !_queue.empty();}());
+
+  auto phase = std::move(_queue.back());
+  _queue.pop_back();
+  return phase;
 }
-*/
 
 // NOTE: FP.4a : The method send should use the mechanisms std::lock_guard<std::mutex> 
 // as well as _condition.notify_one() to add a new message to the queue and afterwards send a notification.

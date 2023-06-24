@@ -27,7 +27,7 @@ class Vehicle;
 template <class T> class MessageQueue {
 public:
   void Send(T &&tlp);
-  T Receive() const;
+  T Receive();
 
 private:
   std::deque<T> _queue;
