@@ -1,5 +1,6 @@
 #include "TrafficLight.h"
 #include "TrafficObject.h"
+#include <mutex>
 #include <thread>
 
 // clang-format off
@@ -14,14 +15,17 @@ T MessageQueue<T>::receive()
     // to wait for and receive new messages and pull them from the queue using move semantics. 
     // The received object should then be returned by the receive function. 
 }
-
-template <typename T>
-void MessageQueue<T>::send(T &&msg)
-{
-    // TODO: FP.4a : The method send should use the mechanisms std::lock_guard<std::mutex> 
-    // as well as _condition.notify_one() to add a new message to the queue and afterwards send a notification.
-}
 */
+
+// TODO: FP.4a : The method send should use the mechanisms std::lock_guard<std::mutex> 
+// as well as _condition.notify_one() to add a new message to the queue and afterwards send a notification.
+template <typename T>
+void MessageQueue<T>::Send(T &&msg)
+{
+  std::lock_guard<std::mutex> lg(_mutex);
+  _queue.emplace_back(std::move(msg));
+  _condition.notify_one();
+}
 
 /* Implementation of class "TrafficLight" */
 
