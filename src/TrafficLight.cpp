@@ -51,7 +51,6 @@ void TrafficLight::waitForGreen()
     if (_phasesQueue.Receive() == TrafficLightPhase::green)
       return;
   }
-
 }
 
 /* 
