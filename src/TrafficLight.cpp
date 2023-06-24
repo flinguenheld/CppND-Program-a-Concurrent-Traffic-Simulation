@@ -15,7 +15,7 @@ T MessageQueue<T>::Receive()
     // The received object should then be returned by the receive function. 
 
   std::unique_lock<std::mutex> ul(_mutex);
-  _condition.wait(ul, [this]{return !_queue.empty();}());
+  _condition.wait(ul, [this]{return !_queue.empty();});
 
   auto phase = std::move(_queue.back());
   _queue.pop_back();
@@ -53,12 +53,10 @@ void TrafficLight::waitForGreen()
   }
 }
 
-/* 
-TrafficLightPhase TrafficLight::getCurrentPhase()
+TrafficLightPhase TrafficLight::getCurrentPhase() const
 {
     return _currentPhase;
 }
-*/
 
 void TrafficLight::simulate()
 {
