@@ -1,5 +1,6 @@
 #include "TrafficLight.h"
 #include "TrafficObject.h"
+#include <thread>
 
 // clang-format off
 
@@ -43,12 +44,15 @@ TrafficLightPhase TrafficLight::getCurrentPhase()
 {
     return _currentPhase;
 }
+*/
 
 void TrafficLight::simulate()
 {
-    // TODO: FP.2b : Finally, the private method „cycleThroughPhases“ should be started in a thread when the public method „simulate“ is called. To do this, use the thread queue in the base class. 
+    // NOTE: FP.2b : Finally, the private method „cycleThroughPhases“ should be started in a thread when the
+    // public method „simulate“ is called. To do this, use the thread queue in the base class. 
+
+  threads.emplace_back(std::thread(&TrafficLight::cycleThroughPhases, this));
 }
-*/
 
 // virtual function which is executed in a thread
 void TrafficLight::cycleThroughPhases()
