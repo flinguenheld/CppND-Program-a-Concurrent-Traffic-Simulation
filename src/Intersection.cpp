@@ -6,6 +6,7 @@
 
 #include "Intersection.h"
 #include "Street.h"
+#include "TrafficLight.h"
 #include "Vehicle.h"
 
 // clang-format off
@@ -88,7 +89,10 @@ void Intersection::addVehicleToQueue(std::shared_ptr<Vehicle> vehicle)
     lck.lock();
     std::cout << "Intersection #" << _id << ": Vehicle #" << vehicle->getID() << " is granted entry." << std::endl;
     
-    // TODO: FP.6b : use the methods TrafficLight::getCurrentPhase and TrafficLight::waitForGreen to block the execution until the traffic light turns green.
+    // NOTE: FP.6b : use the methods TrafficLight::getCurrentPhase and TrafficLight::waitForGreen to block the
+    // execution until the traffic light turns green.
+    if (_trafficLight.getCurrentPhase() != TrafficLightPhase::green)
+      _trafficLight.waitForGreen();
 
     lck.unlock();
 }
