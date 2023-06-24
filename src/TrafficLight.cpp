@@ -1,6 +1,9 @@
+#include "TrafficLight.h"
+#include "TrafficObject.h"
 #include <iostream>
 #include <random>
-#include "TrafficLight.h"
+
+// clang-format off
 
 /* Implementation of class "MessageQueue" */
 
@@ -23,12 +26,18 @@ void MessageQueue<T>::send(T &&msg)
 
 /* Implementation of class "TrafficLight" */
 
-/* 
 TrafficLight::TrafficLight()
 {
-    _currentPhase = TrafficLightPhase::red;
+  _type = ObjectType::objectIntersection;
+  _currentPhase = TrafficLightPhase::red;
 }
 
+void TrafficLight::cycleThroughPhases()
+{
+  _currentPhase = _currentPhase == TrafficLightPhase::red ? TrafficLightPhase::green : TrafficLightPhase::red;
+}
+
+/* 
 void TrafficLight::waitForGreen()
 {
     // TODO: FP.5b : add the implementation of the method waitForGreen, in which an infinite while-loop 
