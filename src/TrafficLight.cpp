@@ -1,5 +1,6 @@
 #include "TrafficLight.h"
 #include "TrafficObject.h"
+#include <chrono>
 #include <mutex>
 #include <thread>
 
@@ -76,24 +77,20 @@ void TrafficLight::cycleThroughPhases()
   auto gen = std::mt19937{seed()};
   auto dist = std::uniform_int_distribution<std::int32_t>{4000, 6000};
 
-  bool new_cycle = true;
-  int random_time;
-  std::chrono::time_point<std::chrono::steady_clock> start;
+  int random_time = 6000;
+  std::chrono::time_point<std::chrono::steady_clock> start = std::chrono::steady_clock::now();
 
   while (true) {
-
-    if (new_cycle) {
-      new_cycle = false;
-      random_time = dist(gen);
-      start = std::chrono::steady_clock::now();
-    }
 
     auto elapsed_time =
         std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start);
 
     if (elapsed_time.count() > random_time) {
+
+      random_time = dist(gen);
+      start = std::chrono::steady_clock::now();
+
       _currentPhase = _currentPhase == TrafficLightPhase::red ? TrafficLightPhase::green : TrafficLightPhase::red;
-      new_cycle = true;
 
       // NOTE: Add a MessageQueue send !
       _phasesQueue.Send(std::move(_currentPhase));
