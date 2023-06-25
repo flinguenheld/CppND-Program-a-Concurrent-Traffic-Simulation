@@ -91,8 +91,6 @@ void TrafficLight::cycleThroughPhases()
       start = std::chrono::steady_clock::now();
 
       _currentPhase = _currentPhase == TrafficLightPhase::red ? TrafficLightPhase::green : TrafficLightPhase::red;
-
-      // NOTE: Add a MessageQueue send !
       _phasesQueue.Send(std::move(_currentPhase));
     }
 
